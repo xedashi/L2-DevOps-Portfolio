@@ -1,0 +1,26 @@
+[Unit]
+Description=Gunicorn instance to serve Flask App
+After=network.target
+
+[Service]
+# под каким пользователем запускать (владелец папки)
+User=flaskuser
+Group=flaskuser
+
+# путь к папке, где лежит файл project/
+WorkingDirectory=/var/www/myapp/flask-app-blueprint
+
+# путь к виртуальному окружению
+Environment="PATH=/var/www/myapp/venv/bin"
+
+# загрузка переменных из .flaskenv файла
+EnvironmentFile=/var/www/myapp/flask-app-blueprint/.flaskenv
+
+# команда для запуска (полный путь до gunicorn внутри venv)
+ExecStart=/var/www/myapp/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 p>
+
+# перезапуск через 5 секунд
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
